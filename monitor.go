@@ -12,6 +12,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	btma_prefix "ouroboros/src/btma_prefix"
 	"ouroboros/src/btms"
@@ -477,11 +478,25 @@ func by_host(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	var dir0 string
 	if len(os.Args) > 1 {
-		conf.Dir0 = os.Args[1]
+		dir0 = os.Args[1]
 	} else {
-		conf.Dir0 = "/d"
+		dir0 = "/d"
+
+		s, e := ioutil.ReadFile("/etc/dse/dse.conf")
+		if e != nil {
+			log.Println("error reding config", e)
+			time.Sleep(time.Second)
+			os.Exit(0)
+		}
+		q := strings.Split(string(s), "\n")
+		dir0 = q[0]
+
+		log.Println("dir0=", dir0)
 	}
+
+	conf.Dir0 = dir0
 
 	load_conf.LoadWaitInterface(conf.Dir0+"/conf/me.txt", &conf.Me)
 

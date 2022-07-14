@@ -20,6 +20,7 @@ import (
 	"net"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	node "ouroboros/src/node"
@@ -376,6 +377,17 @@ func main() {
 		dir0 = os.Args[1]
 	} else {
 		dir0 = "/d"
+
+		s, e := ioutil.ReadFile("/etc/dse/dse.conf")
+		if e != nil {
+			log.Println("error reding config", e)
+			time.Sleep(time.Second)
+			os.Exit(0)
+		}
+		q := strings.Split(string(s), "\n")
+		dir0 = q[0]
+
+		log.Println("dir0=", dir0)
 	}
 
 	log.Println("configuring", dir0)

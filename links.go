@@ -11,6 +11,7 @@ import (
 	"math/rand"
 	"os"
 	"strconv"
+	"strings"
 	"syscall"
 	"time"
 
@@ -249,6 +250,17 @@ func main() {
 		dir0 = os.Args[1]
 	} else {
 		dir0 = "/d"
+
+		s, e := ioutil.ReadFile("/etc/dse/dse.conf")
+		if e != nil {
+			log.Println("error reding config", e)
+			time.Sleep(time.Second)
+			os.Exit(0)
+		}
+		q := strings.Split(string(s), "\n")
+		dir0 = q[0]
+
+		log.Println("dir0=", dir0)
 	}
 	conf.Dir0 = dir0
 

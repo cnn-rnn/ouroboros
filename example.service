@@ -1,0 +1,18 @@
+[Unit]
+Description=example
+After=network.target timers.target
+StartLimitIntervalSec=0
+
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+ExecStart=/usr/bin/env  /usr/bin/example
+LimitNOFILE=100000
+StandardError=append:/var/example.log
+
+[Install]
+WantedBy=multi-user.target
+
